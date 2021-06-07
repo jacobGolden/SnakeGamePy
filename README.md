@@ -20,7 +20,8 @@ improvement planned:
 - change color scheme
 - give snake a face that turns with its direction
 - add loss screen
+    - add high score to loss screen
 - add win screen
- 
+    - add high score to win screen
 
 
