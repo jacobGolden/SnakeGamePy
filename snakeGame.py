@@ -7,7 +7,7 @@ pygame.init()
 class Snake():
     # initializes the snake object
     def __init__(self):
-        self.length = 1
+        self.length = 3
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
         self.color = (17, 24, 47)
@@ -38,7 +38,7 @@ class Snake():
 
     # resets the game grid
     def reset(self):
-        self.length = 1
+        self.length = 3
         self.score = 0
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
@@ -77,6 +77,8 @@ class Food():
     # randomize the next position where food appears
     def randomize_position(self):
         self.position = (random.randint(0, GRID_WIDTH - 1) * GRIDSIZE, random.randint(0, GRID_HEIGHT -1) * GRIDSIZE)
+        # maybe this is where i make sure that the food can't spawn on the snake?
+        
 
     # draw the food cube
     def draw(self, surface):
@@ -135,6 +137,7 @@ def main():
             snake.length += 1
             snake.score += 1
             food.randomize_position()
+            # maybe this is where i make sure food can't spawn on snake
         snake.draw(surface)
         food.draw(surface)
         screen.blit(surface, (0,0))
