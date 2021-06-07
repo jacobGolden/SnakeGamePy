@@ -1,123 +1,145 @@
-# SnakeGamePy
-# Simple Snake Game in Python
-
-import math
-import random
 import pygame
-import tkinter as tk
-from tkinter import messagebox
+import sys
+import random
+pygame.init()
 
-class cube(object):
-    rows = 0
-    w = 0
-    def __init__(self, start, dirnx=1, dirny=0, color=(255,0,0)):
-        pass
+# snake class
+class Snake():
+    # initializes the snake object
+    def __init__(self):
+        self.length = 1
+        self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
+        self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
+        self.color = (17, 24, 47)
+        self.score = 0
 
-    def move(self, dirnx, dirny):
-        pass
+    # tracks the position of the snake head
+    def get_head_position(self):
+        return self.positions[0]
 
-    def draw(self, surface, eyes=False):
-        pass
+    # turning the snake
+    def turn(self, point):
+        if self.length > 1 and (point[0] * -1, point[1] * -1) == self.direction:
+            return
+        else:
+            self.direction = point
 
-class snake(object):
-    body = []
-    turns = {}
-    # initial position of snake
-    def __init__(self, color, pos):
-        self.color = color
-        self.head = cube(pos)
-        self.body.append(self.head)
-        self.dirnx = 0
-        self.dirny = 1
-
+    # snake movement
     def move(self):
+        cur = self.get_head_position()
+        x, y = self.direction
+        new = (((cur[0] + (x*GRIDSIZE)) % SCREEN_WIDTH), (cur[1] + (y*GRIDSIZE)) % SCREEN_HEIGHT)
+        if len(self.positions) > 2 and new in self.positions[2:]:
+            self.reset()
+        else:
+            self.positions.insert(0, new)
+            if len(self.positions) > self.length:
+                self.positions.pop()
+
+    # resets the game grid
+    def reset(self):
+        self.length = 1
+        self.score = 0
+        self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
+        self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
+
+    # draw the snake on the grid
+    def draw(self, surface):
+        for p in self.positions:
+            r = pygame.Rect((p[0], p[1]), (GRIDSIZE, GRIDSIZE))
+            pygame.draw.rect(surface, self.color, r)
+            pygame.draw.rect(surface, (93, 216, 228), r, 1)
+
+    # handle player input from the keyboard
+    def handle_keys(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            keys = pygame.key.get_pressed()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.turn(UP)
+                elif event.key == pygame.K_DOWN:
+                    self.turn(DOWN)
+                elif event.key == pygame.K_LEFT:
+                    self.turn(LEFT)
+                elif event.key == pygame.K_RIGHT:
+                    self.turn(RIGHT)
 
-            # turning the snake with arrow keys
-            for key in keys:
-                if keys[pygame.K_LEFT]:
-                    self.dirnx = -1
-                    self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+# food class
+class Food():
+    # initialize the food square on the grid
+    def __init__(self):
+        self.position = (0,0)
+        self.color = (223, 163, 49)
+        self.randomize_position()
+    
+    # randomize the next position where food appears
+    def randomize_position(self):
+        self.position = (random.randint(0, GRID_WIDTH - 1) * GRIDSIZE, random.randint(0, GRID_HEIGHT -1) * GRIDSIZE)
 
-                elif keys[pygame.K_RIGHT]:
-                    self.dirnx = 1
-                    self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+    # draw the food cube
+    def draw(self, surface):
+        r = pygame.Rect((self.position[0], self.position[1]), (GRIDSIZE, GRIDSIZE))
+        pygame.draw.rect(surface, self.color, r)
+        pygame.draw.rect(surface, (93, 216, 228), r, 1)
 
-                elif keys[pygame.K_UP]:
-                    self.dirnx = 0
-                    self.dirny = -1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+# draw the grid whereon the game is played
+def drawGrid(surface):
+    for y in range(0, int(GRID_HEIGHT)):
+        for x in range(0, int(GRID_WIDTH)):
+            # draws alternating light and dark blue tiles for the grid background
+            if(x + y) % 2 == 0:
+                r = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
+                pygame.draw.rect(surface, (93, 216, 228), r)
+            else:
+                rr = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
+                pygame.draw.rect(surface, (84, 194, 205), rr)
 
-                elif keys[pygame.K_DOWN]:
-                    self.dirnx = 0
-                    self.dirny = 1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+# parameters for window size
+SCREEN_WIDTH = 480
+SCREEN_HEIGHT = 480
+GRIDSIZE = 20
+GRID_WIDTH = SCREEN_HEIGHT / GRIDSIZE
+GRID_HEIGHT = SCREEN_WIDTH / GRIDSIZE
 
-            for i, c in enumerate(self.body):
-                p = c.pos[:]
-                if p in self.turns:
-                    turn = self.turns[p]
-                    c.move(turn[0], turn[1])
-                    if i == len(self.body) - 1:
-                        self.turns.pop()
-                        
-    def reset(self, pos):
-        pass
+# font
+myfont = pygame.font.SysFont("monospace", 15)
 
-    def addCube(self):
-        pass
+# directional movement
+UP = (0,-1)
+DOWN = (0, 1)
+LEFT = (-1, 0)
+RIGHT = (1, 0)
 
-    def draw(self):
-        pass
-
-def drawGrid(w, rows, surface):
-    sizeBtwn = w // rows
-
-    x = 0
-    y = 0
-    for l in range(rows):
-        x = x + sizeBtwn
-        y = y + sizeBtwn
-        #draw lines for the grid
-        pygame.draw.line(surface, (255,255,255), (x,0), (x,w))
-        pygame.draw.line(surface, (255,255,255), (0,y), (w,y))
-
-    pass
-
-def redrawWindow(surface):
-    global rows, width
-    surface.fill((0,0,0))
-    drawGrid(width, rows, surface)
-    pygame.display.update()
-    pass
-
-def randomSnack(rows, items):
-    pass
-
-def message_box(subject, content):
-    pass
-
+# gameloop
 def main():
-    #create a grid for the snake to play in
-    global width, rows
-    width = 500
-    rows = 20
-    win = pygame.display.set_mode((width, width))
-    s = snake((255,0,0), (10,10))
+    pygame.init()
 
-    flag = True
     clock = pygame.time.Clock()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 
-    # govern the speed of the snake
-    while flag:
-        pygame.time.delay(50)
+    surface = pygame.Surface(screen.get_size())
+    surface = surface.convert()
+    drawGrid(surface)
+
+    snake = Snake()
+    food = Food()
+
+    while(True):
         clock.tick(10)
-        redrawWindow(win)
+        snake.handle_keys()
+        drawGrid(surface)
+        snake.move()
+        if snake.get_head_position() == food.position:
+            snake.length += 1
+            snake.score += 1
+            food.randomize_position()
+        snake.draw(surface)
+        food.draw(surface)
+        screen.blit(surface, (0,0))
+        text = myfont.render("Score {0}".format(snake.score), 1, (0, 0, 0))
+        screen.blit(text, (5, 10))
+        pygame.display.update()
 
-    pass
-
+main()
