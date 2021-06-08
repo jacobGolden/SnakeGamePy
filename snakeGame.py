@@ -88,6 +88,24 @@ class Food():
         pygame.draw.rect(surface, self.color, r)
         pygame.draw.rect(surface, (93, 216, 228), r, 1)
 
+# mushroom class
+class Mushroom():
+    # initialize the mushroom square on the grid
+    def __init__(self):
+        self.position = (0,0)
+        self.color = (255,99,71)
+        self.randomize_position()
+
+    # randomize the next position where mushroom appears
+    def randomize_position(self):
+        self.position = (random.randint(0, GRID_WIDTH - 1) * GRIDSIZE, random.randint(0, GRID_HEIGHT -1) * GRIDSIZE)
+    
+    # draw the mushroom cube
+    def draw(self, surface):
+        r = pygame.Rect((self.position[0], self.position[1]), (GRIDSIZE, GRIDSIZE))
+        pygame.draw.rect(surface, self.color, r)
+        pygame.draw.rect(surface, (255, 255, 255), r, 1)
+
 # draw the grid whereon the game is played
 def drawGrid(surface):
     for y in range(0, int(GRID_HEIGHT)):
@@ -143,21 +161,27 @@ def main():
 
     snake = Snake()
     food = Food()
+    mushroom = Mushroom()
 
     while(True):
         clock.tick(12)
         snake.handle_keys()
         drawGrid(surface)
         snake.move()
-        # snake eats food
+        # snake eats food -> increase score and snake length
         if snake.get_head_position() == food.position:
             eatFoodSFX()
             snake.length += 1
             snake.score += 1
             food.randomize_position()
             # maybe this is where i make sure food can't spawn on snake
+        # snake eats mushroom -> decrease score but keep snake length
+        elif snake.get_head_position() == mushroom.position:
+            snake.score -= 1
+            mushroom.randomize_position()
         snake.draw(surface)
         food.draw(surface)
+        mushroom.draw(surface)
         screen.blit(surface, (0,0))
         text = myfont.render("Score {0}".format(snake.score), 1, (0, 0, 0))
         screen.blit(text, (5, 10))

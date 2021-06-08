@@ -16,14 +16,14 @@ improving the build over time until it is unique to myself.
 
 improvement planned:
 - make sure food can't spawn on snake
-- add theme music
-- add sfx
+- add theme music ------------------------------------------------------------------------>DONE
+- add sfx -------------------------------------------------------------------------------->DONE
 - make walls solid (ie snake can't pass through them to cross the grid
-- change color scheme
+- change color scheme -------------------------------------------------------------------->DONE
 - give snake a face that turns with its direction
 - add loss screen
     - add high score to loss screen
 - add win screen
     - add high score to win screen
-
+- add "mushroom" that causes player to lose points but stay the same length if eaten ----->DONE
 
