@@ -12,7 +12,7 @@ class Snake():
         self.length = 3
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
-        self.color = (17, 24, 47)
+        self.color = (255, 255, 255)
         self.score = 0
 
     # tracks the position of the snake head
@@ -50,7 +50,7 @@ class Snake():
         for p in self.positions:
             r = pygame.Rect((p[0], p[1]), (GRIDSIZE, GRIDSIZE))
             pygame.draw.rect(surface, self.color, r)
-            pygame.draw.rect(surface, (93, 216, 228), r, 1)
+            pygame.draw.rect(surface, (128, 128, 128), r, 1)
 
     # handle player input from the keyboard
     def handle_keys(self):
@@ -92,13 +92,13 @@ class Food():
 def drawGrid(surface):
     for y in range(0, int(GRID_HEIGHT)):
         for x in range(0, int(GRID_WIDTH)):
-            # draws alternating light and dark blue tiles for the grid background
+            # draws alternating light and dark shaded tiles for the grid background //// FIND GOOD TWO TONE TO REPRESENT GRASS
             if(x + y) % 2 == 0:
                 r = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
-                pygame.draw.rect(surface, (93, 216, 228), r)
+                pygame.draw.rect(surface, (4, 71, 12), r)
             else:
                 rr = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
-                pygame.draw.rect(surface, (84, 194, 205), rr)
+                pygame.draw.rect(surface, (4, 71, 12), rr)
 
 # game sound and music functions
 def eatFoodSFX():
@@ -145,7 +145,7 @@ def main():
     food = Food()
 
     while(True):
-        clock.tick(10)
+        clock.tick(12)
         snake.handle_keys()
         drawGrid(surface)
         snake.move()
