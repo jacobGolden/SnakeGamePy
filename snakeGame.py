@@ -117,7 +117,7 @@ GRID_WIDTH = SCREEN_HEIGHT / GRIDSIZE
 GRID_HEIGHT = SCREEN_WIDTH / GRIDSIZE
 
 # font
-myfont = pygame.font.SysFont("monospace", 15)
+myfont = pygame.font.SysFont("Comic Sans MS", 20)
 
 # directional movement
 UP = (0,-1)
