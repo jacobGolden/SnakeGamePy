@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 pygame.init()
+pygame.mixer.init()
+
 
 # snake class
 class Snake():
@@ -98,6 +100,15 @@ def drawGrid(surface):
                 rr = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
                 pygame.draw.rect(surface, (84, 194, 205), rr)
 
+# game sound and music functions
+def eatFoodSFX():
+    eatFood = pygame.mixer.Sound("eatFood.wav")
+    pygame.mixer.Sound.play(eatFood)
+
+def themeMusic():
+    pygame.mixer.music.load("happySnake.wav")
+    pygame.mixer.music.play(-1)
+
 # parameters for window size
 SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 480
@@ -117,6 +128,11 @@ RIGHT = (1, 0)
 # gameloop
 def main():
     pygame.init()
+    pygame.mixer.init()
+    
+    # sounds for the game
+    # eatFood = pygame.mixer.Sound("eatFood.wav")
+    themeMusic()
 
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
@@ -133,7 +149,9 @@ def main():
         snake.handle_keys()
         drawGrid(surface)
         snake.move()
+        # snake eats food
         if snake.get_head_position() == food.position:
+            eatFoodSFX()
             snake.length += 1
             snake.score += 1
             food.randomize_position()
