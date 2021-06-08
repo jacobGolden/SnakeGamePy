@@ -93,7 +93,7 @@ class Mushroom():
     # initialize the mushroom square on the grid
     def __init__(self):
         self.position = (0,0)
-        self.color = (255,99,71)
+        self.color = (255,45,35)
         self.randomize_position()
 
     # randomize the next position where mushroom appears
@@ -122,6 +122,10 @@ def drawGrid(surface):
 def eatFoodSFX():
     eatFood = pygame.mixer.Sound("eatFood.wav")
     pygame.mixer.Sound.play(eatFood)
+
+def eatShroomSFX():
+    eatShroom = pygame.mixer.Sound("eatShroom.wav")
+    pygame.mixer.Sound.play(eatShroom)
 
 def themeMusic():
     pygame.mixer.music.load("happySnake.wav")
@@ -177,6 +181,7 @@ def main():
             # maybe this is where i make sure food can't spawn on snake
         # snake eats mushroom -> decrease score but keep snake length
         elif snake.get_head_position() == mushroom.position:
+            eatShroomSFX()
             snake.score -= 1
             mushroom.randomize_position()
         snake.draw(surface)
