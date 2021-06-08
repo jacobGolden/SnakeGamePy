@@ -16,6 +16,8 @@ improving the build over time until it is unique to myself.
 
 improvement planned:
 - make sure food can't spawn on snake
+- add theme music
+- add sfx
 - make walls solid (ie snake can't pass through them to cross the grid
 - change color scheme
 - give snake a face that turns with its direction
