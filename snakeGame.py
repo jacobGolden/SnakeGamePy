@@ -33,6 +33,9 @@ class Snake():
         new = (((cur[0] + (x*GRIDSIZE)) % SCREEN_WIDTH), (cur[1] + (y*GRIDSIZE)) % SCREEN_HEIGHT)
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
+        # attempt at making the walls solid --- NOT CURRENTLY WORKING
+        # elif self.get_head_position() > GRID_WIDTH or self.get_head_position() > GRID_HEIGHT:
+        #    self.reset()
         else:
             self.positions.insert(0, new)
             if len(self.positions) > self.length:
@@ -45,7 +48,7 @@ class Snake():
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
 
-    # draw the snake on the grid
+    # draw the snake on the grid -----> somewhere in this codeblock is where i'll add a pixelart head for the snake (snakeHead.png)
     def draw(self, surface):
         for p in self.positions:
             r = pygame.Rect((p[0], p[1]), (GRIDSIZE, GRIDSIZE))
@@ -94,6 +97,42 @@ class Mushroom():
     def __init__(self):
         self.position = (0,0)
         self.color = (255,45,35)
+        self.randomize_position()
+
+    # randomize the next position where mushroom appears
+    def randomize_position(self):
+        self.position = (random.randint(0, GRID_WIDTH - 1) * GRIDSIZE, random.randint(0, GRID_HEIGHT -1) * GRIDSIZE)
+    
+    # draw the mushroom cube
+    def draw(self, surface):
+        r = pygame.Rect((self.position[0], self.position[1]), (GRIDSIZE, GRIDSIZE))
+        pygame.draw.rect(surface, self.color, r)
+        pygame.draw.rect(surface, (255, 255, 255), r, 1)
+
+# blue mushroom class
+class BlueShroom():
+    # initialize the mushroom square on the grid
+    def __init__(self):
+        self.position = (0,0)
+        self.color = (0, 0, 255)
+        self.randomize_position()
+
+    # randomize the next position where mushroom appears
+    def randomize_position(self):
+        self.position = (random.randint(0, GRID_WIDTH - 1) * GRIDSIZE, random.randint(0, GRID_HEIGHT -1) * GRIDSIZE)
+    
+    # draw the mushroom cube
+    def draw(self, surface):
+        r = pygame.Rect((self.position[0], self.position[1]), (GRIDSIZE, GRIDSIZE))
+        pygame.draw.rect(surface, self.color, r)
+        pygame.draw.rect(surface, (255, 255, 255), r, 1)
+
+# black mushroom class
+class BlackShroom():
+    # initialize the mushroom square on the grid
+    def __init__(self):
+        self.position = (0,0)
+        self.color = (0, 0, 0)
         self.randomize_position()
 
     # randomize the next position where mushroom appears
@@ -156,16 +195,21 @@ def main():
     # eatFood = pygame.mixer.Sound("eatFood.wav")
     themeMusic()
 
+    # runtime/speed
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 
+    # game window
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
     drawGrid(surface)
 
+    # objects
     snake = Snake()
     food = Food()
     mushroom = Mushroom()
+    blueShroom = BlueShroom()
+    blackShroom = BlackShroom()
 
     while(True):
         clock.tick(12)
@@ -184,9 +228,20 @@ def main():
             eatShroomSFX()
             snake.score -= 1
             mushroom.randomize_position()
+        elif snake.get_head_position() == blueShroom.position:
+            eatShroomSFX()
+            snake.score -= 3
+            blueShroom.randomize_position()
+        elif snake.get_head_position() == blackShroom.position:
+            eatShroomSFX()
+            snake.score -= 5
+            blackShroom.randomize_position()
+        # draw snakes and mushrooms to the board
         snake.draw(surface)
         food.draw(surface)
         mushroom.draw(surface)
+        blueShroom.draw(surface)
+        blackShroom.draw(surface)
         screen.blit(surface, (0,0))
         text = myfont.render("Score {0}".format(snake.score), 1, (0, 0, 0))
         screen.blit(text, (5, 10))
