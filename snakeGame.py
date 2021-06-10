@@ -1,9 +1,9 @@
 import pygame
 import sys
 import random
+from pygame.locals import *
 pygame.init()
 pygame.mixer.init()
-
 
 # snake class
 class Snake():
@@ -149,7 +149,7 @@ class BlackShroom():
 def drawGrid(surface):
     for y in range(0, int(GRID_HEIGHT)):
         for x in range(0, int(GRID_WIDTH)):
-            # draws alternating light and dark shaded tiles for the grid background //// FIND GOOD TWO TONE TO REPRESENT GRASS
+            # draws alternating light and dark shaded tiles for the grid background -> they match for now cause i'm testing solid color background
             if(x + y) % 2 == 0:
                 r = pygame.Rect((x*GRIDSIZE, y*GRIDSIZE), (GRIDSIZE, GRIDSIZE))
                 pygame.draw.rect(surface, (4, 71, 12), r)
@@ -180,6 +180,13 @@ GRID_HEIGHT = SCREEN_WIDTH / GRIDSIZE
 # font
 myfont = pygame.font.SysFont("Comic Sans MS", 20)
 
+# load images for sprites -> not currently working
+snakeHeadSprite = pygame.image.load("snakeHead.png")
+birdieSprite = pygame.image.load("food.png")
+redShroomSprite = pygame.image.load("mushroom.png")
+blueShroomSprite = pygame.image.load("blueShroom.png")
+blackShroomSprite = pygame.image.load("blackShroom.png")
+
 # directional movement
 UP = (0,-1)
 DOWN = (0, 1)
@@ -190,9 +197,6 @@ RIGHT = (1, 0)
 def main():
     pygame.init()
     pygame.mixer.init()
-    
-    # sounds for the game
-    # eatFood = pygame.mixer.Sound("eatFood.wav")
     themeMusic()
 
     # runtime/speed
@@ -207,7 +211,7 @@ def main():
     # objects
     snake = Snake()
     food = Food()
-    mushroom = Mushroom()
+    redShroom = Mushroom()
     blueShroom = BlueShroom()
     blackShroom = BlackShroom()
 
@@ -222,12 +226,11 @@ def main():
             snake.length += 1
             snake.score += 1
             food.randomize_position()
-            # maybe this is where i make sure food can't spawn on snake
         # snake eats mushroom -> decrease score but keep snake length
-        elif snake.get_head_position() == mushroom.position:
+        elif snake.get_head_position() == redShroom.position:
             eatShroomSFX()
             snake.score -= 1
-            mushroom.randomize_position()
+            redShroom.randomize_position()
         elif snake.get_head_position() == blueShroom.position:
             eatShroomSFX()
             snake.score -= 3
@@ -238,9 +241,13 @@ def main():
             blackShroom.randomize_position()
         # draw snakes and mushrooms to the board
         snake.draw(surface)
+        screen.blit(birdieSprite, food.position) # should produce food.png
         food.draw(surface)
-        mushroom.draw(surface)
+        # screen.blit(redShroomSprite, redShroom.position) # should produce mushroom.png
+        redShroom.draw(surface)
+        # screen.blit(blueShroomSprite, blueShroom.position) # should produce blueShroom.png
         blueShroom.draw(surface)
+        # screen.blit(blackShroomSprite, blackShroom.position) # should produce blackShroom.png
         blackShroom.draw(surface)
         screen.blit(surface, (0,0))
         text = myfont.render("Score {0}".format(snake.score), 1, (0, 0, 0))
