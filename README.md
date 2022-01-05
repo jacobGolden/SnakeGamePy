@@ -1,4 +1,7 @@
 # SnakeGamePy
+
+_Further development on this project is unlikely as other responsibilites have kept me from fulfilling the other optional improvements._
+
 Snake game in python with GUI.
 
 Built with guidance from the Kite YouTube channel.
