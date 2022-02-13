@@ -10,9 +10,11 @@ Built with guidance from the Kite YouTube channel.
 includes:
 - GUI implementation
 - 2d graphical output
-- score tracking
+- active score tracking
 - randomization
 - keyboard input
+- original theme music
+- sound effects
 
 The intention of this repository is to familiarize myself with python by building a program using a tutorial, and then
 improving the build over time until it is unique to myself.
@@ -27,9 +29,4 @@ improvement planned:
     - add high score to loss screen
 - add win screen
     - add high score to win screen
-- add "mushroom" that causes player to lose points but stay the same length if eaten ----->DONE
-- add theme music ------------------------------------------------------------------------>DONE
-- add sfx -------------------------------------------------------------------------------->DONE
-- change color scheme -------------------------------------------------------------------->DONE
-
 
