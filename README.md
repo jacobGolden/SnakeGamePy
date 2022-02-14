@@ -2,7 +2,7 @@
 
 _Further development on this project is unlikely as other responsibilites have kept me from fulfilling the other optional improvements._
 
-[snakeGamePy](https://user-images.githubusercontent.com/48334372/153797909-ee817ddf-b54e-4909-94e5-8b4365c87e49.PNG)
+[snakeGamePy](https://user-images.githubusercontent.com/48334372/153797909-ee817ddf-b54e-4909-94e5-8b4365c87e49.PNG) <---CLICK HERE FOR SCREENSHOT
 
 Snake game in python with GUI.
 
