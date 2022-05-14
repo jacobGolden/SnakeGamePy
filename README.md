@@ -5,9 +5,6 @@ _Further development on this project is unlikely as other responsibilites have k
 [snakeGamePy](https://user-images.githubusercontent.com/48334372/153797909-ee817ddf-b54e-4909-94e5-8b4365c87e49.PNG) <---CLICK HERE FOR SCREENSHOT
 
 Snake game in python with GUI.
-
-Built with guidance from the Kite YouTube channel.
-    Link to his source code here: https://github.com/kiteco/python-youtube-code/blob/master/snake/snake.py
     
 How to Play:
 - Use arrow keys to guide the snake
